@@ -1,0 +1,470 @@
+@import "tailwindcss";
+
+:root {
+  /* Primary */
+  --mochi-pink: #FFD6E0;
+  --logo-pink: #FF92B3;
+  --yield-green: #D8F2C2;
+  --logo-green: #A6D95B;
+  --btn-green: #B7E36D;
+  --cream: #FFF7F0;
+
+  /* Secondary */
+  --success-green: #8BCF65;
+  --soft-sage: #C8E6B5;
+  --rose: #F8B8C8;
+
+  /* Neutrals */
+  --background: #FFF7F0;
+  --surface: #FFFFFF;
+  --border: #E5E7EB;
+  --muted-text: #6B7280;
+  --primary-text: #1C1C1C;
+  --secondary-text: #444444;
+
+  /* Layout */
+  --max-width: 1280px;
+  --hero-max-width: 1400px;
+  --radius-card: 16px;
+  --radius-modal: 24px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-soft: 0 2px 16px rgba(28, 28, 28, 0.04);
+  --shadow-card: 0 4px 24px rgba(28, 28, 28, 0.06);
+  --shadow-glass: 0 8px 32px rgba(28, 28, 28, 0.04);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-muted: var(--muted-text);
+  --color-primary: var(--primary-text);
+  --color-secondary: var(--secondary-text);
+  --color-mochi-pink: var(--mochi-pink);
+  --color-yield-green: var(--yield-green);
+  --color-cream: var(--cream);
+  --color-success: var(--success-green);
+  --color-sage: var(--soft-sage);
+  --color-logo-pink: var(--logo-pink);
+  --color-logo-green: var(--logo-green);
+  --color-btn-green: var(--btn-green);
+  --color-rose: var(--rose);
+  --font-sans: var(--font-open-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--primary-text);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-text);
+}
+
+/* Design system utilities */
+.section-padding {
+  padding-left: 48px;
+  padding-right: 48px;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-left: 80px;
+    padding-right: 80px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-left: 120px;
+    padding-right: 120px;
+  }
+}
+
+.content-max {
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-max {
+  max-width: var(--hero-max-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hero background glows */
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+
+.hero-glow-pink {
+  width: 600px;
+  height: 600px;
+  top: -10%;
+  left: -5%;
+  background: #FFD6E0;
+  opacity: 0.2;
+}
+
+.hero-glow-cream {
+  width: 700px;
+  height: 500px;
+  top: 0;
+  left: 30%;
+  background: #FFF4E8;
+  opacity: 0.3;
+}
+
+.hero-glow-green {
+  width: 550px;
+  height: 550px;
+  top: 35%;
+  right: 18%;
+  background: #D8F2C2;
+  opacity: 0.12;
+}
+
+.hero-glow-peach {
+  width: 500px;
+  height: 500px;
+  bottom: 5%;
+  left: 5%;
+  background: #FFE8D6;
+  opacity: 0.15;
+}
+
+/* Subtle pink wash behind hero market cards (top-right) */
+.hero-cards-pink-glow {
+  position: absolute;
+  top: -3rem;
+  right: -1.5rem;
+  bottom: 0;
+  width: 400px;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 95% 65% at 78% 6%,
+      rgba(255, 175, 198, 0.55) 0%,
+      rgba(255, 205, 218, 0.28) 42%,
+      rgba(255, 230, 238, 0) 72%
+    ),
+    radial-gradient(
+      ellipse 55% 90% at 100% 45%,
+      rgba(255, 190, 210, 0.22) 0%,
+      rgba(255, 220, 232, 0) 58%
+    );
+  filter: blur(32px);
+}
+
+@media (min-width: 1280px) {
+  .hero-cards-pink-glow {
+    width: 440px;
+    right: -2rem;
+  }
+}
+
+/* Avatar ambient gradient blobs — tight halo behind mascot */
+.hero-avatar-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-avatar-blob-green {
+  width: 200px;
+  height: 200px;
+  top: 10%;
+  left: 56%;
+  transform: translate(-40%, -15%);
+  background: radial-gradient(
+    circle,
+    rgba(216, 242, 194, 0.9) 0%,
+    rgba(183, 227, 109, 0.45) 42%,
+    rgba(183, 227, 109, 0) 68%
+  );
+  filter: blur(20px);
+}
+
+.hero-avatar-blob-pink {
+  width: 190px;
+  height: 170px;
+  bottom: 6%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 180, 200, 0.8) 0%,
+    rgba(255, 214, 224, 0.4) 48%,
+    rgba(255, 214, 224, 0) 70%
+  );
+  filter: blur(22px);
+}
+
+/* Sticky bottom glass fade */
+.bottom-glass-fade {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  height: 7.5rem;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.bottom-glass-fade::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  mask-image: linear-gradient(to top, black 15%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 15%, transparent 100%);
+}
+
+.bottom-glass-fade::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(255, 247, 240, 0.88) 0%,
+    rgba(255, 247, 240, 0.45) 45%,
+    rgba(255, 247, 240, 0) 100%
+  );
+}
+
+/* Navbar scroll glass */
+.navbar-glass {
+  background: rgba(255, 247, 240, 0.55);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 24px rgba(28, 28, 28, 0.04);
+}
+
+/* Glass cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  box-shadow: var(--shadow-glass);
+}
+
+.glass-card-heavy {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow-glass);
+}
+
+.hero-market-panel {
+  background: #ffffff;
+  border-radius: 28px;
+  border: 1px solid #EAE5DF;
+  box-shadow: 0 4px 32px rgba(28, 28, 28, 0.06);
+  overflow: hidden;
+}
+
+.hero-market-card {
+  background: rgba(255, 255, 255, 0.38);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  box-shadow:
+    0 8px 32px rgba(28, 28, 28, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+/* Tint raster logos to solid white (use on colored icon backgrounds) */
+.logo-tint-white {
+  filter: brightness(0) invert(1);
+}
+
+/* Hero typography — gradient clipped to text */
+.hero-yield-gradient {
+  display: inline;
+  background: linear-gradient(
+    90deg,
+    #c85a78 0%,
+    #d46a88 22%,
+    #dc7a96 48%,
+    #d97390 54%,
+    #7a9460 58%,
+    #5a7040 68%,
+    #8aaf3e 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+@supports not (background-clip: text) {
+  .hero-yield-gradient {
+    background: none;
+    color: #d4738f;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+/* Hero buttons */
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 56px;
+  padding: 0 2rem;
+  background: var(--btn-green);
+  color: var(--primary-text);
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: var(--radius-pill);
+  transition: background 250ms ease, transform 250ms ease;
+}
+
+.btn-hero-primary:hover {
+  background: #a8d85f;
+}
+
+.btn-hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 56px;
+  padding: 0 2rem;
+  background: transparent;
+  color: var(--primary-text);
+  font-weight: 600;
+  font-size: 15px;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--radius-pill);
+  transition: background 250ms ease;
+}
+
+.btn-hero-secondary:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.btn-wallet-landing {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 44px;
+  padding: 0 1.25rem;
+  background: var(--logo-pink);
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: var(--radius-pill);
+  transition: opacity 250ms ease;
+}
+
+.btn-wallet-landing:hover {
+  opacity: 0.85;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 48px;
+  padding: 0 1.75rem;
+  background: var(--yield-green);
+  color: var(--primary-text);
+  font-weight: 600;
+  border-radius: var(--radius-pill);
+  transition: background 250ms ease, transform 250ms ease;
+}
+
+.btn-primary:hover {
+  background: var(--soft-sage);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 48px;
+  padding: 0 1.75rem;
+  background: transparent;
+  color: var(--primary-text);
+  font-weight: 600;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  transition: background 250ms ease, border-color 250ms ease;
+}
+
+.btn-secondary:hover {
+  background: var(--cream);
+  border-color: var(--soft-sage);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
+}
+
+.text-highlight-pink {
+  color: var(--mochi-pink);
+  background: linear-gradient(135deg, #FFD6E0, #F8B8C8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-highlight-green {
+  color: var(--success-green);
+}
+
+/* Organic motion */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes leaf-sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+.animate-leaf {
+  animation: leaf-sway 3s ease-in-out infinite;
+}
