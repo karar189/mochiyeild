@@ -23,8 +23,8 @@ export function ImpliedRateGauge({
   }
 
   const getBarColor = () => {
-    if (impliedAPY < 0) return 'bg-rose'
-    if (impliedAPY < 500) return 'bg-success'
+    if (impliedAPY < 0) return 'bg-[#FF92B3]'
+    if (impliedAPY < 500) return 'bg-[#A6D95B]'
     if (impliedAPY < 2000) return 'bg-yield-green'
     return 'bg-sage'
   }

@@ -86,19 +86,19 @@ export function DepositForm({
           />
           <button
             onClick={handleMax}
-            className="px-2 py-1 bg-surface border border-border rounded-lg text-xs text-secondary hover:bg-yield-green/30 transition-colors"
+            className="px-2 py-1 bg-[#151515] border border-white/[0.06] rounded-lg text-xs text-secondary hover:bg-[#A6D95B]/10 transition-colors"
           >
             MAX
           </button>
-          <div className="px-3 py-1 bg-surface border border-border rounded-lg flex items-center gap-2">
-            <div className="w-5 h-5 bg-sage rounded-full" />
+          <div className="px-3 py-1 bg-[#151515] border border-white/[0.06] rounded-lg flex items-center gap-2">
+            <div className="w-5 h-5 bg-[#A6D95B]/30 rounded-full" />
             <span className="text-primary text-sm">wstETH</span>
           </div>
         </div>
       </div>
 
       <div className="flex justify-center -my-2 relative z-10">
-        <div className="bg-surface border border-border rounded-xl p-2">
+        <div className="bg-[#151515] border border-white/[0.06] rounded-xl p-2">
           <ArrowDown className="w-4 h-4 text-muted" strokeWidth={1.75} />
         </div>
       </div>
@@ -120,8 +120,8 @@ export function DepositForm({
             <span className="text-xl text-primary font-medium">
               {amountNumber.toFixed(4)}
             </span>
-            <div className="px-3 py-1 bg-yield-green border border-yield-green rounded-lg">
-              <span className="text-primary text-sm">YT-wstETH</span>
+            <div className="px-3 py-1 bg-[#A6D95B]/15 border border-[#A6D95B]/25 rounded-lg">
+              <span className="text-[#A6D95B] text-sm">YT-wstETH</span>
             </div>
           </div>
         </div>
@@ -160,9 +160,9 @@ export function DepositForm({
       )}
 
       {txStatus === 'success' && (
-        <div className="mt-4 p-3 bg-yield-green/30 border border-yield-green rounded-xl flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-success" strokeWidth={1.75} />
-          <span className="text-success text-sm">Deposit successful!</span>
+        <div className="mt-4 p-3 bg-[#A6D95B]/10 border border-[#A6D95B]/25 rounded-xl flex items-center gap-2">
+          <CheckCircle className="w-4 h-4 text-[#A6D95B]" strokeWidth={1.75} />
+          <span className="text-[#A6D95B] text-sm">Deposit successful!</span>
         </div>
       )}
       {txStatus === 'error' && (

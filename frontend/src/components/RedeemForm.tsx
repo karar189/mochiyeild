@@ -58,9 +58,9 @@ export function RedeemForm({
   }
 
   return (
-    <div className="card border-yield-green/40 bg-yield-green/10">
+    <div className="card border-[#A6D95B]/25 bg-[#A6D95B]/5">
       <h3 className="text-primary font-medium mb-4 flex items-center gap-2">
-        <Unlock className="w-5 h-5 text-success" strokeWidth={1.75} />
+        <Unlock className="w-5 h-5 text-[#A6D95B]" strokeWidth={1.75} />
         Redeem PT for wstETH
       </h3>
 
@@ -106,9 +106,9 @@ export function RedeemForm({
       </button>
 
       {txStatus === 'success' && (
-        <div className="mt-4 p-3 bg-yield-green/30 border border-yield-green rounded-xl flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-success" strokeWidth={1.75} />
-          <span className="text-success text-sm">Redemption successful!</span>
+        <div className="mt-4 p-3 bg-[#A6D95B]/10 border border-[#A6D95B]/25 rounded-xl flex items-center gap-2">
+          <CheckCircle className="w-4 h-4 text-[#A6D95B]" strokeWidth={1.75} />
+          <span className="text-[#A6D95B] text-sm">Redemption successful!</span>
         </div>
       )}
       {txStatus === 'error' && (

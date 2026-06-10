@@ -50,10 +50,10 @@ export function MaturityCountdown({ maturityTimestamp }: MaturityCountdownProps)
 
   if (isMatured) {
     return (
-      <div className="card bg-yield-green/30 border-yield-green">
+      <div className="card bg-[#A6D95B]/10 border-[#A6D95B]/25">
         <div className="flex items-center gap-3 mb-4">
-          <CheckCircle className="w-6 h-6 text-success" strokeWidth={1.75} />
-          <h3 className="text-success font-medium">Matured</h3>
+          <CheckCircle className="w-6 h-6 text-[#A6D95B]" strokeWidth={1.75} />
+          <h3 className="text-[#A6D95B] font-medium">Matured</h3>
         </div>
         <p className="text-secondary text-sm">
           PT tokens can now be redeemed for underlying assets.
@@ -65,7 +65,7 @@ export function MaturityCountdown({ maturityTimestamp }: MaturityCountdownProps)
   return (
     <div className="card">
       <div className="flex items-center gap-3 mb-4">
-        <Clock className="w-5 h-5 text-success" strokeWidth={1.75} />
+        <Clock className="w-5 h-5 text-[#A6D95B]" strokeWidth={1.75} />
         <h3 className="text-secondary text-sm font-medium">Time to Maturity</h3>
       </div>
 
@@ -93,7 +93,7 @@ export function MaturityCountdown({ maturityTimestamp }: MaturityCountdownProps)
         </div>
         <div className="h-2 bg-cream rounded-full overflow-hidden">
           <div
-            className="h-full bg-yield-green rounded-full transition-all duration-1000"
+            className="h-full bg-[#A6D95B] rounded-full transition-all duration-1000"
             style={{ width: `${progress}%` }}
           />
         </div>

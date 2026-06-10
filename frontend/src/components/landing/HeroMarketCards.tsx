@@ -1,26 +1,43 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
-import { LineChart, ChevronRight, Radio } from 'lucide-react'
+import { ChevronRight, TrendingUp, ArrowUpRight, Activity } from 'lucide-react'
+import { TokenIcon } from '@/components/TokenIcon'
 import { useLandingStats } from '@/hooks'
 
-function TokenLogo({ src, alt }: { src: string; alt: string }) {
+const SPARK_BARS = [
+  36, 38, 37, 40, 39, 42, 41, 44, 43, 46, 45, 48, 47, 50, 49, 52, 51, 54, 53, 56,
+  55, 58, 57, 60, 59, 62, 61, 64, 63, 66, 65, 68, 67, 70, 69, 72, 71, 74, 73, 76,
+  75, 78, 77, 80, 79, 82, 81, 84, 83, 86, 85, 88, 87, 90, 89, 92, 91, 94, 93, 96,
+]
+
+function Sparkline() {
   return (
-    <div className="w-9 h-9 rounded-full shrink-0 overflow-hidden bg-white/50 backdrop-blur-sm border border-white/60">
-      <Image
-        src={src}
-        alt={alt}
-        width={36}
-        height={36}
-        className="w-full h-full object-cover"
-        unoptimized
-      />
+    <div className="flex items-end justify-between gap-[2px] h-14 w-full" aria-hidden>
+      {SPARK_BARS.map((h, i) => (
+        <div
+          key={i}
+          className="w-[3px] rounded-full shrink-0"
+          style={{
+            height: `${h}%`,
+            background: 'linear-gradient(to top, #A6D95B 0%, #C8E890 55%, #E8F5D0 100%)',
+            opacity: 0.45 + (i / SPARK_BARS.length) * 0.55,
+          }}
+        />
+      ))}
     </div>
   )
 }
 
-export function HeroMarketCards() {
+interface HeroMarketCardsProps {
+  compact?: boolean
+  showPopularMarkets?: boolean
+}
+
+export function HeroMarketCards({
+  compact = false,
+  showPopularMarkets = true,
+}: HeroMarketCardsProps) {
   const stats = useLandingStats()
 
   const tvlDisplay = stats.isLive ? `${stats.tvl} wstETH` : '$125.4M'
@@ -47,82 +64,130 @@ export function HeroMarketCards() {
   }
 
   const popularMarkets = [ptMarket, ytMarket]
+  const cardClass = `hero-market-card-dark shrink-0 ${compact ? 'p-4 rounded-2xl' : 'p-6'}`
 
   return (
-    <div className="w-full lg:w-[340px] xl:w-[360px] flex flex-col gap-5 h-full min-h-0 lg:pb-0">
-      <div className="hero-market-card p-6 shrink-0">
-        <div className="flex items-center justify-between gap-2 mb-5">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-9 h-9 rounded-xl bg-yield-green/50 backdrop-blur-sm border border-white/40 flex items-center justify-center shrink-0">
-              <LineChart className="w-4 h-4 text-primary" strokeWidth={2} />
-            </div>
-            <h3 className="text-lg font-semibold text-primary">Market Overview</h3>
-          </div>
-          {stats.isLive && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-medium text-success bg-yield-green/40 px-2 py-0.5 rounded-full shrink-0">
-              <Radio className="w-2.5 h-2.5" strokeWidth={2} />
-              Live
-            </span>
-          )}
+    <div
+      className={`flex flex-col ${
+        compact ? 'w-[248px] gap-3 shrink-0' : 'w-full gap-4'
+      }`}
+    >
+      <div className={`${cardClass} relative overflow-hidden`}>
+        <div
+          className="pointer-events-none absolute -top-16 -right-12 w-44 h-44 rounded-full blur-3xl"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(166,217,91,0.22), rgba(255,146,179,0.08) 55%, transparent 75%)',
+          }}
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-px"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)',
+          }}
+          aria-hidden
+        />
+
+        <div className={`relative flex items-center justify-between gap-2 ${compact ? 'mb-3' : 'mb-4'}`}>
+          <h3 className={`font-semibold text-[#F6F5F2] tracking-tight ${compact ? 'text-sm' : 'text-lg'}`}>
+            Market Overview
+          </h3>
+          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-[#D8F2C2] bg-[#A6D95B]/15 border border-[#A6D95B]/25 px-2 py-1 rounded-full shrink-0">
+            <Activity className="w-2.5 h-2.5 animate-pulse" strokeWidth={2.5} />
+            Live
+          </span>
         </div>
 
-        <p className="text-xs text-[#6B7280] mb-1">Total Value Locked</p>
-        <div className="flex items-baseline gap-2 mb-5">
-          <span className="text-[32px] font-bold text-primary leading-none tracking-tight">
+        <div className="relative mb-1 flex items-center justify-between gap-2">
+          <p className="text-[11px] font-medium uppercase tracking-wide text-[#A1A1AA]">
+            Total Value Locked
+          </p>
+          <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-[#A6D95B] bg-[#A6D95B]/12 border border-[#A6D95B]/25 px-1.5 py-0.5 rounded-md">
+            <TrendingUp className="w-3 h-3" strokeWidth={2.5} />
+            {stats.isLive ? stats.impliedAPYFormatted : '+12.45%'}
+          </span>
+        </div>
+        <div className={`relative flex items-baseline gap-2 ${compact ? 'mb-2' : 'mb-3'}`}>
+          <span
+            className={`font-bold text-[#F6F5F2] leading-none tracking-tight ${
+              compact ? 'text-2xl' : 'text-[34px]'
+            }`}
+          >
             {tvlDisplay}
           </span>
-          {stats.isLive && (
-            <span className="text-sm font-semibold text-success">
-              {stats.impliedAPYFormatted} APY
-            </span>
-          )}
-          {!stats.isLive && (
-            <span className="text-sm font-semibold text-success">+12.45%</span>
-          )}
         </div>
 
-        <div className="border-t border-white/35 pt-4">
-          <div className="grid grid-cols-2 divide-x divide-white/35">
-            <div className="pr-4">
-              <p className="text-xs text-[#6B7280] mb-1">Active Markets</p>
-              <p className="text-2xl font-bold text-primary">{activeMarkets}</p>
+        {!compact && (
+          <div className="relative mb-4">
+            <Sparkline />
+          </div>
+        )}
+
+        <div className="relative border-t border-white/[0.1] pt-3">
+          <div className="grid grid-cols-2 divide-x divide-white/[0.1]">
+            <div className="pr-3">
+              <p className="text-[11px] text-[#A1A1AA] mb-1">Active Markets</p>
+              <div className="flex items-center gap-1.5">
+                <p className={`font-bold text-[#F6F5F2] leading-none ${compact ? 'text-lg' : 'text-2xl'}`}>
+                  {activeMarkets}
+                </p>
+                <span className="inline-flex items-center text-[10px] font-semibold text-[#A6D95B]">
+                  <ArrowUpRight className="w-3 h-3" strokeWidth={2.5} />
+                </span>
+              </div>
             </div>
             <div className="pl-4">
-              <p className="text-xs text-[#6B7280] mb-1">{volumeLabel}</p>
-              <p className="text-2xl font-bold text-primary">{volumeDisplay}</p>
+              <p className="text-[11px] text-[#A1A1AA] mb-1">{volumeLabel}</p>
+              <div className="flex items-center gap-1.5">
+                <p className={`font-bold text-[#F6F5F2] leading-none ${compact ? 'text-lg' : 'text-2xl'}`}>
+                  {volumeDisplay}
+                </p>
+                <span className="inline-flex items-center text-[10px] font-semibold text-[#A6D95B]">
+                  <ArrowUpRight className="w-3 h-3" strokeWidth={2.5} />
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="hero-market-card p-6 flex flex-col flex-1 min-h-0">
-        <h3 className="text-lg font-semibold text-primary mb-4 shrink-0">
+      {showPopularMarkets && (
+      <div className={`hero-market-card-dark flex flex-col ${compact ? 'p-4 rounded-2xl' : 'p-6 flex-1 min-h-0'}`}>
+        <h3 className={`font-semibold text-[#F6F5F2] shrink-0 ${compact ? 'text-sm mb-2.5' : 'text-lg mb-4'}`}>
           {stats.isLive ? 'Live Markets' : 'Popular Markets'}
         </h3>
 
-        <div className="flex-1 flex flex-col min-h-0">
+        <div className={compact ? '' : 'flex-1 flex flex-col min-h-0'}>
           {popularMarkets.map((market, i) => (
             <div
               key={market.name}
-              className={`flex items-center justify-between gap-3 py-4 shrink-0 ${
-                i > 0 ? 'border-t border-white/35' : ''
-              }`}
+              className={`flex items-center justify-between gap-2 shrink-0 ${
+                compact ? 'py-2.5' : 'py-4'
+              } ${i > 0 ? 'border-t border-white/[0.1]' : ''}`}
             >
-              <div className="flex items-center gap-3 min-w-0">
-                <TokenLogo src="/tokens/wsteth.png" alt="wstETH" />
-                <span className="text-sm text-primary truncate">{market.name}</span>
+              <div className="flex items-center gap-2 min-w-0">
+                <TokenIcon
+                  label={market.name}
+                  size={compact ? 28 : 36}
+                  className="rounded-full border-white/[0.14]"
+                />
+                <span className={`text-[#E4E4E7] truncate ${compact ? 'text-xs' : 'text-sm'}`}>
+                  {market.name}
+                </span>
               </div>
               <div className="text-right shrink-0">
                 <p
-                  className={`text-sm font-bold leading-tight ${
-                    market.positive ? 'text-success' : 'text-primary'
+                  className={`font-bold leading-tight ${compact ? 'text-xs' : 'text-sm'} ${
+                    market.positive ? 'text-[#D8F2C2]' : 'text-[#F6F5F2]'
                   }`}
                 >
                   {market.yield}
                 </p>
                 <p
-                  className={`text-xs font-medium leading-tight mt-0.5 ${
-                    market.positive ? 'text-success' : 'text-[#EF4444]'
+                  className={`font-medium leading-tight mt-0.5 ${compact ? 'text-[10px]' : 'text-xs'} ${
+                    market.positive ? 'text-[#A6D95B]' : 'text-[#FF9B9B]'
                   }`}
                 >
                   {market.change}
@@ -134,12 +199,15 @@ export function HeroMarketCards() {
 
         <Link
           href="/markets"
-          className="mt-auto pt-5 pb-1 border-t border-white/35 flex items-center justify-between text-sm text-[#6B7280] hover:text-primary transition-colors shrink-0"
+          className={`border-t border-white/[0.1] flex items-center justify-between text-[#A1A1AA] hover:text-[#F6F5F2] transition-colors shrink-0 ${
+            compact ? 'pt-3 mt-1 text-xs' : 'mt-auto pt-5 pb-1 text-sm'
+          }`}
         >
           View All Markets
-          <ChevronRight className="w-4 h-4" strokeWidth={1.75} />
+          <ChevronRight className={compact ? 'w-3.5 h-3.5' : 'w-4 h-4'} strokeWidth={1.75} />
         </Link>
       </div>
+      )}
     </div>
   )
 }

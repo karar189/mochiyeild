@@ -1,86 +1,198 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import {
+  motion,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from 'framer-motion'
+import { ArrowRight, Sprout } from 'lucide-react'
+import { MOCHI } from '@/lib/mochi-colors'
 import { WalletConnect } from './WalletConnect'
-import { MochiLogo } from './MochiLogo'
 
-const landingNav = [
-  { href: '/markets', label: 'Trade' },
-  { href: '/deposit', label: 'Vaults' },
-  { href: '/deposit', label: 'Portfolio' },
-  { href: '/analytics', label: 'Analytics' },
-  { href: '#whitepaper', label: 'Whitepaper' },
-]
+const SPRING = {
+  stiffness: 260,
+  damping: 34,
+  mass: 0.85,
+} as const
 
-const appNav = [
+const INSTANT_SPRING = {
+  stiffness: 10000,
+  damping: 100,
+  mass: 1,
+} as const
+
+const MotionLink = motion.create(Link)
+
+const navItems = [
   { href: '/markets', label: 'Markets' },
   { href: '/deposit', label: 'Vaults' },
   { href: '/analytics', label: 'Analytics' },
+  { href: '/whitepaper', label: 'Docs' },
 ]
+
+function LandingLogo() {
+  return (
+    <Link href="/" className="relative z-10 inline-flex shrink-0 items-center gap-1.5">
+      <Sprout
+        className="w-4 h-4"
+        style={{ color: MOCHI.matcha }}
+        strokeWidth={2.5}
+      />
+      <span className="text-base font-semibold tracking-tight leading-none">
+        <span style={{ color: MOCHI.strawberry }}>mochi</span>
+        <span style={{ color: MOCHI.matcha }}>trade</span>
+      </span>
+    </Link>
+  )
+}
 
 export function Navbar() {
   const pathname = usePathname()
   const isLanding = pathname === '/'
-  const navItems = isLanding ? landingNav : appNav
-  const [scrolled, setScrolled] = useState(false)
+  const reduceMotion = useReducedMotion()
+
+  const [scrolled, setScrolled] = useState(!isLanding)
+
+  const progress = useSpring(isLanding ? 0 : 1, {
+    ...(reduceMotion ? INSTANT_SPRING : SPRING),
+  })
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    onScroll()
+    if (!isLanding) {
+      setScrolled(true)
+      progress.set(1)
+      return
+    }
+
+    setScrolled(false)
+    progress.set(0)
+
+    let ticking = false
+
+    const update = () => {
+      const y = window.scrollY
+      setScrolled((prev) => {
+        if (!prev && y > 56) return true
+        if (prev && y < 20) return false
+        return prev
+      })
+      ticking = false
+    }
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true
+        requestAnimationFrame(update)
+      }
+    }
+
+    update()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [isLanding, progress])
 
-  const navSurfaceClass = isLanding
-    ? scrolled
-      ? 'navbar-glass'
-      : 'bg-transparent'
-    : 'bg-surface/90 backdrop-blur-md border-b border-border'
+  useEffect(() => {
+    progress.set(scrolled ? 1 : 0)
+  }, [scrolled, progress])
+
+  const outerPaddingTop = useTransform(progress, [0, 1], [32, 16])
+  const maxWidth = useTransform(progress, [0, 1], [1400, 720])
+  const barPaddingY = useTransform(progress, [0, 1], [4, 6])
+  const barPaddingX = useTransform(progress, [0, 1], [0, 16])
+  const barGap = useTransform(progress, [0, 1], [16, 10])
+  const borderRadius = useTransform(progress, [0, 1], [0, 9999])
+  const glassOpacity = useTransform(progress, [0, 1], [0, 1])
+  const navGap = useTransform(progress, [0, 1], [32, 14])
+  const linkPadX = useTransform(progress, [0, 1], [0, 8])
+  const btnHeight = useTransform(progress, [0, 1], [44, 40])
+  const btnPadX = useTransform(progress, [0, 1], [24, 18])
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 h-20 transition-all duration-300 ${navSurfaceClass}`}
+    <motion.nav
+      className="fixed inset-x-0 top-0 z-50 section-padding"
+      style={{ paddingTop: outerPaddingTop }}
     >
-      <div className={`h-full w-full ${isLanding ? 'section-padding' : 'content-max px-6 lg:px-8'}`}>
-        <div className={`${isLanding ? 'content-max' : ''} h-full`}>
-          <div className="relative flex h-full items-center justify-between">
-            <div className="flex shrink-0 items-center">
-              <MochiLogo />
-            </div>
+      <motion.div
+        className="relative mx-auto flex w-full items-center"
+        style={{
+          maxWidth,
+          paddingTop: barPaddingY,
+          paddingBottom: barPaddingY,
+          paddingLeft: barPaddingX,
+          paddingRight: barPaddingX,
+          borderRadius,
+          gap: barGap,
+        }}
+      >
+        <motion.div
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            opacity: glassOpacity,
+            borderRadius,
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+          }}
+          aria-hidden
+        />
 
-            <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 md:flex items-center gap-7 lg:gap-8">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href
-                const isAnchor = item.href.startsWith('#')
+        <LandingLogo />
 
-                const className = `text-sm font-medium leading-none text-[#1C1C1C] transition-opacity hover:opacity-70 ${
-                  isActive && !isAnchor ? 'opacity-100' : ''
-                }`
+        <motion.nav
+          className="hidden min-w-0 flex-1 md:flex items-center justify-center"
+          style={{ gap: navGap }}
+          aria-label="Main"
+        >
+          {navItems.map((item) => {
+            const isActive =
+              pathname === item.href ||
+              (item.href === '/whitepaper' && pathname.startsWith('/whitepaper'))
 
-                if (isAnchor) {
-                  return (
-                    <a key={item.label} href={item.href} className={className}>
-                      {item.label}
-                    </a>
-                  )
-                }
+            return (
+              <motion.div
+                key={item.label}
+                className="shrink-0"
+                style={{ paddingLeft: linkPadX, paddingRight: linkPadX }}
+              >
+                <Link
+                  href={item.href}
+                  className={`block text-sm font-medium leading-none transition-colors ${
+                    isActive
+                      ? 'text-[#F6F5F2]'
+                      : 'text-[#A1A1AA] hover:text-[#F6F5F2]'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              </motion.div>
+            )
+          })}
+        </motion.nav>
 
-                return (
-                  <Link key={item.label} href={item.href} className={className}>
-                    {item.label}
-                  </Link>
-                )
-              })}
-            </div>
-
-            <div className="ml-auto flex shrink-0 items-center">
-              <WalletConnect variant={isLanding ? 'landing' : 'default'} />
-            </div>
-          </div>
+        <div className="relative z-10 ml-auto shrink-0">
+          {isLanding ? (
+            <MotionLink
+              href="/markets"
+              className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#FF92B3] text-[#1C1C1C] text-sm font-semibold transition-colors hover:bg-[#FFA8C3]"
+              style={{
+                height: btnHeight,
+                paddingLeft: btnPadX,
+                paddingRight: btnPadX,
+              }}
+            >
+              Launch App
+              <ArrowRight className="w-4 h-4" strokeWidth={2} />
+            </MotionLink>
+          ) : (
+            <WalletConnect variant="landing" />
+          )}
         </div>
-      </div>
-    </nav>
+      </motion.div>
+    </motion.nav>
   )
 }

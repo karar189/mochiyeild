@@ -52,8 +52,8 @@ export function FeeDecayVisualizer({ currentTimeToMaturity }: FeeDecayVisualizer
           <Percent className="w-5 h-5 text-success" strokeWidth={1.75} />
           <h3 className="text-secondary text-sm font-medium">Fee Decay Curve</h3>
         </div>
-        <div className="bg-yield-green px-3 py-1 rounded-full">
-          <span className="text-primary text-sm font-medium">
+        <div className="bg-[#A6D95B]/15 border border-[#A6D95B]/25 px-3 py-1 rounded-full">
+          <span className="text-[#A6D95B] text-sm font-medium">
             Current: {(currentFee / 100).toFixed(2)}%
           </span>
         </div>
@@ -65,40 +65,41 @@ export function FeeDecayVisualizer({ currentTimeToMaturity }: FeeDecayVisualizer
             <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <XAxis
               dataKey="days"
-              stroke="#EAE5DF"
-              tick={{ fill: '#8B8B8B', fontSize: 10 }}
+              stroke="rgba(255,255,255,0.06)"
+              tick={{ fill: '#A1A1AA', fontSize: 10 }}
               tickFormatter={(value) => `${value}d`}
             />
             <YAxis
-              stroke="#EAE5DF"
-              tick={{ fill: '#8B8B8B', fontSize: 10 }}
+              stroke="rgba(255,255,255,0.06)"
+              tick={{ fill: '#A1A1AA', fontSize: 10 }}
               tickFormatter={(value) => `${value}%`}
               domain={[0, 1.2]}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #EAE5DF',
+                backgroundColor: '#101010',
+                border: '1px solid rgba(255,255,255,0.08)',
                 borderRadius: '12px',
-                boxShadow: '0 4px 24px rgba(28, 28, 28, 0.06)',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
               }}
-              labelStyle={{ color: '#444444' }}
+              labelStyle={{ color: '#A1A1AA' }}
+              itemStyle={{ color: '#A6D95B' }}
               formatter={(value) => [`${Number(value).toFixed(2)}%`, 'Fee']}
               labelFormatter={(label) => `${label} days to maturity`}
             />
             <ReferenceLine
               x={currentDays}
-              stroke="#8BCF65"
+              stroke="#A6D95B"
               strokeDasharray="3 3"
-              label={{ value: 'Now', fill: '#8BCF65', fontSize: 10 }}
+              label={{ value: 'Now', fill: '#A6D95B', fontSize: 10 }}
             />
             <Line
               type="monotone"
               dataKey="fee"
-              stroke="#8BCF65"
+              stroke="#A6D95B"
               strokeWidth={2.5}
               dot={false}
-              activeDot={{ r: 5, fill: '#8BCF65' }}
+              activeDot={{ r: 5, fill: '#A6D95B' }}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -106,11 +107,11 @@ export function FeeDecayVisualizer({ currentTimeToMaturity }: FeeDecayVisualizer
       </div>
 
       <div className="grid grid-cols-3 gap-2 mt-4">
-        <div className="bg-cream rounded-xl p-2 text-center">
-          <div className="text-success text-xs">Near Maturity</div>
+        <div className="bg-[#A6D95B]/15 border border-[#A6D95B]/25 rounded-xl p-2 text-center">
+          <div className="text-[#A6D95B] text-xs">Near Maturity</div>
           <div className="text-primary font-medium text-sm">0.05%</div>
         </div>
-        <div className="bg-yield-green/50 rounded-xl p-2 text-center border border-yield-green">
+        <div className="bg-[#A6D95B]/15 rounded-xl p-2 text-center border border-[#A6D95B]/25">
           <div className="text-secondary text-xs">Current ({currentDays}d)</div>
           <div className="text-primary font-medium text-sm">
             {(currentFee / 100).toFixed(2)}%

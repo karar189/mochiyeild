@@ -25,22 +25,22 @@ export function WalletConnect({ variant = 'default' }: WalletConnectProps) {
   const walletConnectors = useWalletConnectors()
   const { disconnect } = useDisconnect()
 
+  const isDark = variant === 'landing'
+
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  const buttonClass =
-    variant === 'landing'
-      ? 'btn-wallet-landing'
-      : 'btn-primary text-sm disabled:opacity-50'
+  const buttonClass = isDark
+    ? 'inline-flex items-center justify-center gap-1.5 h-10 px-5 rounded-full bg-[#FF92B3] hover:bg-[#FFA8C3] text-[#1C1C1C] text-sm font-semibold transition-colors disabled:opacity-50'
+    : 'btn-primary text-sm disabled:opacity-50'
 
-  // Stable SSR shell — wagmi state/connectors differ on server vs client
   if (!mounted) {
     return (
       <button type="button" className={buttonClass} disabled aria-hidden>
         <Wallet className="w-4 h-4" strokeWidth={1.75} />
         Connect Wallet
-        {variant === 'landing' ? (
+        {isDark ? (
           <ArrowRight className="w-4 h-4" strokeWidth={2} />
         ) : (
           <ChevronDown className="w-4 h-4" strokeWidth={1.75} />
@@ -52,19 +52,36 @@ export function WalletConnect({ variant = 'default' }: WalletConnectProps) {
   if (isConnected && address) {
     return (
       <div className="flex items-center gap-2">
-        <div className="px-4 py-2 bg-cream border border-border rounded-full flex items-center gap-2">
-          <div className="w-2 h-2 bg-success rounded-full" />
-          <span className="text-sm text-secondary font-medium">
+        <div
+          className={`px-4 py-2 rounded-full flex items-center gap-2 ${
+            isDark
+              ? 'bg-white/[0.06] border border-white/[0.08]'
+              : 'bg-cream border border-border'
+          }`}
+        >
+          <div className="w-2 h-2 bg-[#A6D95B] rounded-full" />
+          <span
+            className={`text-sm font-medium ${
+              isDark ? 'text-[#F6F5F2]' : 'text-secondary'
+            }`}
+          >
             {address.slice(0, 6)}...{address.slice(-4)}
           </span>
         </div>
         <button
           type="button"
           onClick={() => disconnect()}
-          className="p-2 bg-cream border border-border rounded-full hover:bg-yield-green/50 transition-colors"
+          className={`p-2 rounded-full transition-colors ${
+            isDark
+              ? 'bg-white/[0.06] border border-white/[0.08] hover:bg-white/[0.1]'
+              : 'bg-cream border border-border hover:bg-yield-green/50'
+          }`}
           aria-label="Disconnect wallet"
         >
-          <LogOut className="w-4 h-4 text-secondary" strokeWidth={1.75} />
+          <LogOut
+            className={`w-4 h-4 ${isDark ? 'text-[#A1A1AA]' : 'text-secondary'}`}
+            strokeWidth={1.75}
+          />
         </button>
       </div>
     )
@@ -82,7 +99,7 @@ export function WalletConnect({ variant = 'default' }: WalletConnectProps) {
       >
         <Wallet className="w-4 h-4" strokeWidth={1.75} />
         {isPending ? 'Connecting...' : 'Connect Wallet'}
-        {variant === 'landing' ? (
+        {isDark ? (
           <ArrowRight className="w-4 h-4" strokeWidth={2} />
         ) : (
           <ChevronDown className="w-4 h-4" strokeWidth={1.75} />
@@ -92,7 +109,11 @@ export function WalletConnect({ variant = 'default' }: WalletConnectProps) {
       {open && (
         <div
           role="menu"
-          className="absolute right-0 mt-2 w-56 bg-surface border border-border rounded-2xl shadow-[var(--shadow-card)] z-50"
+          className={`absolute right-0 mt-2 w-56 rounded-2xl z-50 ${
+            isDark
+              ? 'bg-[#101010] border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
+              : 'bg-surface border border-border shadow-[var(--shadow-card)]'
+          }`}
         >
           {walletConnectors.map((connector) => (
             <button
@@ -110,13 +131,23 @@ export function WalletConnect({ variant = 'default' }: WalletConnectProps) {
                   },
                 )
               }}
-              className="w-full px-4 py-3 text-left text-sm text-secondary hover:bg-cream first:rounded-t-2xl last:rounded-b-2xl transition-colors disabled:opacity-50"
+              className={`w-full px-4 py-3 text-left text-sm first:rounded-t-2xl last:rounded-b-2xl transition-colors disabled:opacity-50 ${
+                isDark
+                  ? 'text-[#A1A1AA] hover:bg-white/[0.04] hover:text-[#F6F5F2]'
+                  : 'text-secondary hover:bg-cream'
+              }`}
             >
               {connector.name}
             </button>
           ))}
           {error && (
-            <p className="px-4 py-2 text-xs text-red-600 border-t border-border">
+            <p
+              className={`px-4 py-2 text-xs border-t ${
+                isDark
+                  ? 'text-[#FF92B3] border-white/[0.06]'
+                  : 'text-red-600 border-border'
+              }`}
+            >
               {error.message.includes('rejected')
                 ? 'Connection cancelled.'
                 : 'Could not connect. Try again or pick another wallet.'}

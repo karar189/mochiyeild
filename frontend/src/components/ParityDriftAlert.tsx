@@ -84,9 +84,9 @@ export function ParityDriftAlert({
   return (
     <div className="card">
       <div className="flex items-center gap-3 mb-4">
-        <Scale className="w-5 h-5 text-success" strokeWidth={1.75} />
+        <Scale className="w-5 h-5 text-[#A6D95B]" strokeWidth={1.75} />
         <h3 className="text-secondary text-sm font-medium">PT + YT Parity</h3>
-        <CheckCircle className="w-4 h-4 text-success ml-auto" strokeWidth={1.75} />
+        <CheckCircle className="w-4 h-4 text-[#A6D95B] ml-auto" strokeWidth={1.75} />
       </div>
 
       <div className="bg-cream rounded-xl p-4 mb-4">
@@ -118,7 +118,7 @@ export function ParityDriftAlert({
 
       <div className="flex items-center justify-between">
         <span className="text-muted text-sm">Drift:</span>
-        <span className="text-success font-medium">
+        <span className="text-[#A6D95B] font-medium">
           {driftPercent.toFixed(2)}% (within bounds)
         </span>
       </div>

@@ -30,7 +30,7 @@ export function SwapModal({ type, pool, onClose }: SwapModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
       <div className="card w-full max-w-md">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-primary font-medium">Trade {type}-wstETH</h3>
@@ -46,7 +46,7 @@ export function SwapModal({ type, pool, onClose }: SwapModalProps) {
               onClick={() => setDirection(d)}
               className={`flex-1 py-2 rounded-full text-sm font-medium ${
                 direction === d
-                  ? 'bg-yield-green text-primary'
+                  ? 'bg-[#FF92B3] text-[#1C1C1C]'
                   : 'bg-cream text-secondary'
               }`}
             >

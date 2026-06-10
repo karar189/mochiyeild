@@ -37,19 +37,21 @@ export function PoolCard({
   return (
     <>
       <div
-        className={`card ${isPT ? 'bg-cream/30' : 'bg-yield-green/20 border-yield-green/40'}`}
+        className={`card ${isPT ? '' : 'border-[#A6D95B]/25 bg-[#A6D95B]/5'}`}
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <div
               className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                isPT ? 'bg-surface border border-border' : 'bg-surface border border-yield-green'
+                isPT
+                  ? 'bg-[#151515] border border-white/[0.06]'
+                  : 'bg-[#A6D95B]/15 border border-[#A6D95B]/25'
               }`}
             >
               {isPT ? (
                 <Shield className="w-5 h-5 text-primary" strokeWidth={1.75} />
               ) : (
-                <Sparkles className="w-5 h-5 text-success" strokeWidth={1.75} />
+                <Sparkles className="w-5 h-5 text-[#A6D95B]" strokeWidth={1.75} />
               )}
             </div>
             <div>
@@ -62,8 +64,8 @@ export function PoolCard({
           <div
             className={`px-3 py-1 rounded-full flex items-center gap-1 text-sm ${
               isPositiveChange
-                ? 'bg-yield-green text-primary'
-                : 'bg-rose/30 text-primary'
+                ? 'bg-[#A6D95B]/15 text-[#A6D95B] border border-[#A6D95B]/25'
+                : 'bg-[#FF92B3]/15 text-[#FF92B3] border border-[#FF92B3]/25'
             }`}
           >
             {isPositiveChange ? (
@@ -103,7 +105,7 @@ export function PoolCard({
           </div>
           <div className="bg-cream rounded-xl p-3">
             <div className="text-muted text-xs mb-1">Dynamic Fee</div>
-            <div className={`font-medium text-sm ${isPT ? 'text-primary' : 'text-success'}`}>
+            <div className={`font-medium text-sm ${isPT ? 'text-primary' : 'text-[#A6D95B]'}`}>
               {(fee / 100).toFixed(2)}%
             </div>
           </div>
@@ -114,8 +116,8 @@ export function PoolCard({
           disabled={!pool}
           className={`w-full mt-4 py-3 rounded-full font-medium transition-colors disabled:opacity-50 ${
             isPT
-              ? 'bg-surface border border-border text-primary hover:bg-cream'
-              : 'bg-yield-green text-primary hover:bg-sage'
+              ? 'bg-transparent border border-white/[0.12] text-primary hover:border-[#FF92B3]/35 hover:bg-[#FF92B3]/6'
+              : 'bg-[#FF92B3] text-[#1C1C1C] hover:bg-[#FFA8C3]'
           }`}
         >
           Trade {type}

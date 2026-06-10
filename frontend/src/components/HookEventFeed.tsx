@@ -90,17 +90,17 @@ export function HookEventFeed() {
     <div className="card overflow-hidden p-0">
       <div className="flex items-center justify-between p-4 border-b border-border">
         <div className="flex items-center gap-2">
-          <Activity className="w-5 h-5 text-success" strokeWidth={1.75} />
+          <Activity className="w-5 h-5 text-[#A6D95B]" strokeWidth={1.75} />
           <h3 className="text-primary font-medium">Live Hook Activity</h3>
         </div>
         <button
           onClick={() => setIsPaused(!isPaused)}
           className={`px-3 py-1 rounded-full text-xs flex items-center gap-1 ${
-            isLive && !isPaused ? 'bg-yield-green text-primary' : 'bg-cream text-muted'
+            isLive && !isPaused ? 'bg-[#A6D95B]/15 text-[#A6D95B] border border-[#A6D95B]/25' : 'bg-cream text-muted'
           }`}
         >
           <span
-            className={`w-2 h-2 rounded-full ${isLive && !isPaused ? 'bg-success animate-pulse' : 'bg-muted'}`}
+            className={`w-2 h-2 rounded-full ${isLive && !isPaused ? 'bg-[#A6D95B] animate-pulse' : 'bg-muted'}`}
           />
           {isPaused ? 'Paused' : isLive ? 'Live' : 'Offline'}
         </button>
