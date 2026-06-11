@@ -64,6 +64,12 @@ contract MochiYieldHook is BaseHook {
     /// @notice Pool configurations by PoolId
     mapping(PoolId => PoolConfig) public poolConfigs;
 
+    /// @notice Registered PT pool (for live price reads)
+    PoolId public ptPoolId;
+
+    /// @notice Registered YT pool (for live price reads)
+    PoolId public ytPoolId;
+
     /// @notice Last recorded PT price (1e18 scale, in WETH terms)
     uint256 public lastPTPrice;
 
@@ -197,6 +203,12 @@ contract MochiYieldHook is BaseHook {
             underlying: _underlying,
             isRegistered: true
         });
+
+        if (isPTPool) {
+            ptPoolId = poolId;
+        } else {
+            ytPoolId = poolId;
+        }
 
         emit PoolRegistered(poolId, isPTPool, maturity);
     }
@@ -453,7 +465,51 @@ contract MochiYieldHook is BaseHook {
         int256 impliedAPY,
         uint256 parityDrift
     ) {
-        return (lastPTPrice, lastYTPrice, lastImpliedAPY, lastParityDrift);
+        ptPrice = _livePtPrice();
+        ytPrice = _liveYtPrice();
+
+        uint256 timeToMaturity = _timeToMaturity();
+        if (ptPrice > 0 && timeToMaturity > 0) {
+            impliedAPY = calculateImpliedAPY(ptPrice, timeToMaturity);
+        } else {
+            impliedAPY = lastImpliedAPY;
+        }
+
+        parityDrift = _parityDriftBps(ptPrice, ytPrice, underlyingPrice);
+    }
+
+    function _timeToMaturity() internal view returns (uint256) {
+        PoolConfig memory config = poolConfigs[ptPoolId];
+        if (!config.isRegistered || block.timestamp >= config.maturity) return 0;
+        return config.maturity - block.timestamp;
+    }
+
+    function _livePtPrice() internal view returns (uint256) {
+        if (lastPTPrice > 0) return lastPTPrice;
+        if (PoolId.unwrap(ptPoolId) == bytes32(0)) return 0;
+        (uint160 sqrtPriceX96,,,) = poolManager.getSlot0(ptPoolId);
+        return _sqrtPriceToPrice(sqrtPriceX96);
+    }
+
+    function _liveYtPrice() internal view returns (uint256) {
+        if (lastYTPrice > 0) return lastYTPrice;
+        if (PoolId.unwrap(ytPoolId) == bytes32(0)) return 0;
+        (uint160 sqrtPriceX96,,,) = poolManager.getSlot0(ytPoolId);
+        return _sqrtPriceToPrice(sqrtPriceX96);
+    }
+
+    function _parityDriftBps(
+        uint256 ptPrice,
+        uint256 ytPrice,
+        uint256 _underlyingPrice
+    ) internal pure returns (uint256 driftBps) {
+        if (_underlyingPrice == 0) return 0;
+        uint256 combinedValue = ptPrice + ytPrice;
+        if (combinedValue > _underlyingPrice) {
+            driftBps = ((combinedValue - _underlyingPrice) * 10000) / _underlyingPrice;
+        } else {
+            driftBps = ((_underlyingPrice - combinedValue) * 10000) / _underlyingPrice;
+        }
     }
 
     /// @notice Get pool config

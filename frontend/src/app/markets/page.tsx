@@ -28,9 +28,9 @@ export default function MarketsPage() {
     >
       <div className="mb-8">
         <ParityDriftAlert
-          ptPrice={ptPrice || 0.97e18}
-          ytPrice={ytPrice || 0.03e18}
-          underlyingPrice={underlyingPrice || 1e18}
+          ptPrice={ptPrice}
+          ytPrice={ytPrice}
+          underlyingPrice={underlyingPrice}
         />
       </div>
 
@@ -39,7 +39,7 @@ export default function MarketsPage() {
           <div className="grid md:grid-cols-2 gap-6">
             <PoolCard
               type="PT"
-              price={ptPrice || 0.97e18}
+              price={ptPrice}
               liquidity={isConfigured ? 500000 : 0}
               volume24h={0}
               fee={currentFee || 42}
@@ -48,7 +48,7 @@ export default function MarketsPage() {
             />
             <PoolCard
               type="YT"
-              price={ytPrice || 0.03e18}
+              price={ytPrice}
               liquidity={isConfigured ? 500000 : 0}
               volume24h={0}
               fee={currentFee || 42}
@@ -62,9 +62,9 @@ export default function MarketsPage() {
 
         <div className="space-y-6">
           <ImpliedRateGauge
-            impliedAPY={impliedAPY || 0}
-            ptPrice={ptPrice || 0.97e18}
-            timeToMaturity={timeToMaturity || 28 * 24 * 60 * 60}
+            impliedAPY={impliedAPY}
+            ptPrice={ptPrice}
+            timeToMaturity={timeToMaturity}
           />
 
           <div className="card">
@@ -85,7 +85,7 @@ export default function MarketsPage() {
               <div className="flex justify-between text-sm">
                 <span className="text-muted">Implied APY</span>
                 <span className="text-[#A6D95B] font-medium">
-                  {((impliedAPY || 0) / 100).toFixed(2)}%
+                  {(impliedAPY / 100).toFixed(2)}%
                 </span>
               </div>
             </div>

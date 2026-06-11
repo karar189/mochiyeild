@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { useAccount, useChainId } from 'wagmi'
-import { ArrowDown, Loader2, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react'
-import { getTransactionExplorerUrl } from '@/lib/explorer'
+import { ArrowDown, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { TxHashLink } from '@/components/TxHashLink'
 
 export type DepositResult = {
   depositHash: `0x${string}`
@@ -191,41 +191,6 @@ export function DepositForm({
           <AlertCircle className="w-4 h-4 text-primary" strokeWidth={1.75} />
           <span className="text-primary text-sm">{txError ?? 'Transaction failed. Please try again.'}</span>
         </div>
-      )}
-    </div>
-  )
-}
-
-function truncateHash(hash: string) {
-  return `${hash.slice(0, 10)}…${hash.slice(-8)}`
-}
-
-function TxHashLink({
-  chainId,
-  label,
-  hash,
-}: {
-  chainId: number
-  label: string
-  hash: `0x${string}`
-}) {
-  const explorerUrl = getTransactionExplorerUrl(chainId, hash)
-
-  return (
-    <div className="flex items-center justify-between gap-2 pl-6 text-xs">
-      <span className="text-secondary">{label}</span>
-      {explorerUrl ? (
-        <a
-          href={explorerUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 font-mono text-[#A6D95B] hover:underline"
-        >
-          {truncateHash(hash)}
-          <ExternalLink className="w-3 h-3" strokeWidth={1.75} />
-        </a>
-      ) : (
-        <span className="font-mono text-primary">{truncateHash(hash)}</span>
       )}
     </div>
   )

@@ -94,6 +94,16 @@ export const MOCHI_HOOK_ABI = [
   },
   {
     type: 'function',
+    name: 'calculateImpliedAPY',
+    inputs: [
+      { name: 'ptPrice', type: 'uint256' },
+      { name: 'timeToMaturity', type: 'uint256' },
+    ],
+    outputs: [{ name: 'impliedAPY', type: 'int256' }],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
     name: 'calculateFeeForMaturity',
     inputs: [{ name: 'timeToMaturity', type: 'uint256' }],
     outputs: [{ name: 'feeBps', type: 'uint256' }],
@@ -180,6 +190,16 @@ export const MOCHI_HOOK_ABI = [
       { name: 'timestamp', type: 'uint256', indexed: false },
       { name: 'reason', type: 'string', indexed: false },
     ],
+  },
+] as const
+
+export const POOL_MANAGER_ABI = [
+  {
+    type: 'function',
+    name: 'extsload',
+    inputs: [{ name: 'slot', type: 'bytes32' }],
+    outputs: [{ name: 'value', type: 'bytes32' }],
+    stateMutability: 'view',
   },
 ] as const
 

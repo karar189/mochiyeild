@@ -5,7 +5,7 @@ import { Activity, TrendingUp, AlertTriangle, XCircle, Zap, RefreshCw } from 'lu
 import { useHookEvents, HookEvent, HookEventType } from '@/hooks/useHookEvents'
 
 export function HookEventFeed() {
-  const { events, isLive } = useHookEvents()
+  const { events, isLive, isLoading } = useHookEvents()
   const [isPaused, setIsPaused] = useState(false)
   const displayEvents = isPaused ? [] : events
 
@@ -107,11 +107,15 @@ export function HookEventFeed() {
       </div>
 
       <div className="max-h-96 overflow-y-auto">
-        {displayEvents.length === 0 ? (
+        {isLoading ? (
+          <div className="px-4 py-8 text-center text-muted text-sm">
+            Loading hook history from chain…
+          </div>
+        ) : displayEvents.length === 0 ? (
           <div className="px-4 py-8 text-center text-muted text-sm">
             {isLive
-              ? 'Waiting for hook events. Execute a swap to see live activity.'
-              : 'Connect to Anvil (chain 31337) with deployed contracts.'}
+              ? 'No hook events found yet. Execute a swap on Markets to trigger activity.'
+              : 'Connect your wallet on Unichain Sepolia (chain 1301) to view hook activity.'}
           </div>
         ) : (
           displayEvents.map((event) => (

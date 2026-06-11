@@ -31,9 +31,9 @@ export default function AnalyticsPage() {
     >
       <div className="mb-8">
         <ParityDriftAlert
-          ptPrice={ptPrice || 0.97e18}
-          ytPrice={ytPrice || 0.03e18}
-          underlyingPrice={underlyingPrice || 1e18}
+          ptPrice={ptPrice}
+          ytPrice={ytPrice}
+          underlyingPrice={underlyingPrice}
         />
       </div>
 
@@ -63,9 +63,9 @@ export default function AnalyticsPage() {
 
         <div className="space-y-6">
           <ImpliedRateGauge
-            impliedAPY={impliedAPY || 0}
-            ptPrice={ptPrice || 0.97e18}
-            timeToMaturity={timeToMaturity || 28 * 24 * 60 * 60}
+            impliedAPY={impliedAPY}
+            ptPrice={ptPrice}
+            timeToMaturity={timeToMaturity}
           />
 
           <MaturityCountdown maturityTimestamp={maturity} />
