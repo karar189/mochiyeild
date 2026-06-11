@@ -22,7 +22,7 @@ function BrowserChrome() {
       </div>
       <div className="flex-1 flex justify-center min-w-0">
         <span className="text-[11px] text-[#71717A] font-[family-name:var(--font-inter)] bg-white/[0.04] border border-white/[0.06] px-4 py-1.5 rounded-full truncate max-w-[240px]">
-          app.mochitrade.xyz
+          app.mochiyeild.xyz
         </span>
       </div>
       <div className="w-[52px] shrink-0" aria-hidden />

@@ -55,7 +55,7 @@ export function WhitepaperSection() {
               single atomic hook.
             </p>
             <p className="text-[#6B7280] text-sm leading-relaxed">
-              MochiTrade introduces a third path for yield-bearing assets: trade the yield
+              mochiyeild introduces a third path for yield-bearing assets: trade the yield
               itself while keeping your principal intact. Our whitepaper details the
               tokenization model, hook architecture, and on-chain invariants that make
               this possible.
@@ -66,7 +66,7 @@ export function WhitepaperSection() {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <p className="text-xs font-semibold text-muted tracking-widest uppercase mb-1">
-                  MochiTrade
+                  mochiyeild
                 </p>
                 <h3 className="text-xl font-bold text-primary">
                   Yield Curve-Aware AMM Hooks

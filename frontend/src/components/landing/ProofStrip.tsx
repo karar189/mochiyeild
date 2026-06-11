@@ -77,7 +77,7 @@ export function ProofStrip() {
         {!isLive && (
           <p className="mt-6 text-xs text-[#71717A]">
             Figures populate from <code className="font-mono">useLandingStats()</code>{' '}
-            once connected to a network with a MochiTrade deployment.
+            once connected to a network with a mochiyeild deployment.
           </p>
         )}
       </div>

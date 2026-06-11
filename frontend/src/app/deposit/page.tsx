@@ -80,7 +80,7 @@ export default function DepositPage() {
               <div>
                 <h4 className="text-primary font-medium mb-2">How it works</h4>
                 <ul className="text-secondary text-sm space-y-2">
-                  <li>1. Deposit wstETH into the MochiTrade Vault</li>
+                  <li>1. Deposit wstETH into the mochiyeild vault</li>
                   <li>2. Receive equal amounts of PT-wstETH and YT-wstETH</li>
                   <li>3. Hold PT for fixed-income exposure, or trade YT for yield views</li>
                   <li>4. After maturity, redeem PT for underlying wstETH</li>

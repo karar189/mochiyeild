@@ -48,9 +48,9 @@ export const WHITEPAPER_SECTIONS: WhitepaperSection[] = [
     title: 'Abstract',
     group: 'get-started',
     paragraphs: [
-      'MochiTrade is a yield trading protocol built on Uniswap v4 that splits yield-bearing assets into Principal Tokens (PT) and Yield Tokens (YT). This separation enables investors to independently trade future yield while preserving principal exposure — a capability impossible with traditional vault mechanics.',
+      'mochiyeild is a yield trading protocol built on Uniswap v4 that splits yield-bearing assets into Principal Tokens (PT) and Yield Tokens (YT). This separation enables investors to independently trade future yield while preserving principal exposure — a capability impossible with traditional vault mechanics.',
       "The protocol's core innovation is MochiYieldHook, a single Uniswap v4 hook that enforces three layers of fixed-income market logic atomically: implied rate bounds, maturity-aware fee decay, and cross-pool PT/YT parity monitoring.",
-      'Beyond the hook, MochiTrade closes the loop with a Reactive Smart Contract that subscribes to ParityDriftDetected on the origin chain and triggers a cross-chain callback to an ArbitrageRouter — moving parity enforcement from passive monitoring toward autonomous correction.',
+      'Beyond the hook, mochiyeild closes the loop with a Reactive Smart Contract that subscribes to ParityDriftDetected on the origin chain and triggers a cross-chain callback to an ArbitrageRouter — moving parity enforcement from passive monitoring toward autonomous correction.',
     ],
     visual: 'reactive-pipeline',
     visualCaption:
@@ -80,7 +80,7 @@ export const WHITEPAPER_SECTIONS: WhitepaperSection[] = [
     title: '2. Roles & Participants',
     group: 'get-started',
     paragraphs: [
-      'MochiTrade serves three distinct participants in the same market structure:',
+      'mochiyeild serves three distinct participants in the same market structure:',
     ],
     table: [
       ['Alice · LP', 'Provides liquidity to PT/WETH or YT/WETH pools. Earns maturity-scaled swap fees — higher far from expiry, lower near redemption.'],
@@ -121,7 +121,7 @@ impliedAPY(bps) = -premium / ptPrice × (365 days / timeToMaturity) × 10000`,
     title: '4. Maturity Fee Decay',
     group: 'core-concepts',
     paragraphs: [
-      "Unlike generic dynamic fee hooks that respond to volume, MochiTrade's fees decay with time-to-maturity because volatility decreases as PT approaches redemption:",
+      "Unlike generic dynamic fee hooks that respond to volume, mochiyeild's fees decay with time-to-maturity because volatility decreases as PT approaches redemption:",
     ],
     code: `ttm ≥ 90 days  → 100 bps (1.00%)
 ttm ≤ 7 days   →   5 bps (0.05%)

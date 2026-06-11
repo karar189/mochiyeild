@@ -27,7 +27,7 @@ export default function AnalyticsPage() {
   return (
     <AppPageShell
       title="Hook Analytics"
-      subtitle="Real-time monitoring of MochiTrade hook activity. Watch the protocol adapt."
+      subtitle="Real-time monitoring of mochiyeild hook activity. Watch the protocol adapt."
     >
       <div className="mb-8">
         <ParityDriftAlert

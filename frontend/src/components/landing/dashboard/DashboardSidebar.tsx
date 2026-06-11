@@ -36,11 +36,11 @@ export function DashboardSidebar({ theme = 'light' }: DashboardSidebarProps) {
       <div className="mb-8 px-3 lg:px-5 flex justify-center lg:justify-start">
         <div className="hidden lg:block px-1">
           <span className="text-base font-semibold text-[#FF92B3] font-clash">mochi</span>
-          <span className="text-base font-semibold text-[#A6D95B] font-clash">trade</span>
+          <span className="text-base font-semibold text-[#A6D95B] font-clash">yeild</span>
         </div>
         <div className="lg:hidden text-[10px] font-bold font-clash">
           <span className="text-[#FF92B3]">m</span>
-          <span className="text-[#A6D95B]">t</span>
+          <span className="text-[#A6D95B]">y</span>
         </div>
       </div>
 

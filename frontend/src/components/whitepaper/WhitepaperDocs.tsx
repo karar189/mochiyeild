@@ -45,7 +45,7 @@ export function WhitepaperDocs() {
               <h1
                 className={`${bebasNeue.className} text-4xl md:text-5xl leading-[0.95] text-[#F6F5F2] mb-4`}
               >
-                MochiTrade Technical Specification
+                mochiyeild Technical Specification
               </h1>
               <p className="text-[#A1A1AA] text-lg leading-relaxed">
                 Time-aware fixed income markets on Uniswap v4 — PT/YT tokenization,

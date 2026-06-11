@@ -20,7 +20,7 @@ export function DashboardHeader() {
             <Bell className="w-3.5 h-3.5 text-[#71717A]" strokeWidth={1.75} />
           </div>
           <div className="h-8 w-8 rounded-full bg-[#1a1a1a] border border-white/[0.08] flex items-center justify-center text-[10px] font-medium text-[#F6F5F2]">
-            MT
+            MY
           </div>
         </div>
       </div>

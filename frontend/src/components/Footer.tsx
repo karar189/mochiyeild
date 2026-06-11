@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { Sprout, FileText } from 'lucide-react'
+import { FileText } from 'lucide-react'
+import { BrandLogo } from '@/components/BrandLogo'
 import deployment from '@/lib/deployments.json'
 
-const GITHUB_URL = 'https://github.com/mochitrade'
+const GITHUB_URL = 'https://github.com/karar189/mochitrade'
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -51,13 +52,7 @@ export function Footer() {
       <div className="content-max">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           <div className="md:col-span-2">
-            <span className="inline-flex items-center gap-1.5">
-              <Sprout className="w-4 h-4 text-[#A6D95B]" strokeWidth={2.5} />
-              <span className="text-xl font-semibold tracking-tight leading-none">
-                <span className="text-[#FF92B3]">mochi</span>
-                <span className="text-[#A6D95B]">trade</span>
-              </span>
-            </span>
+            <BrandLogo showLink={false} size="lg" />
             <p className="mt-4 text-[#A1A1AA] text-sm max-w-sm leading-relaxed">
               Trade future yield without selling your assets. Yield markets
               powered by Uniswap v4 Hooks.
@@ -136,7 +131,7 @@ export function Footer() {
 
         <div className="pt-8 mt-8 border-t border-white/[0.06] flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-[#A1A1AA] text-sm">
-            © {new Date().getFullYear()} MochiTrade. All rights reserved.
+            © {new Date().getFullYear()} mochiyeild. All rights reserved.
           </p>
           <p className="text-[#A1A1AA]/60 text-xs">
             Trade Yield. Keep Principal.

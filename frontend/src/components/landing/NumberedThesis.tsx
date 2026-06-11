@@ -15,7 +15,7 @@ const points = [
   },
   {
     num: '03',
-    title: 'Mochitrade makes the hook the referee.',
+    title: 'mochiyeild makes the hook the referee.',
     desc: 'Every swap: re-price the fee by maturity, bound the implied rate, check parity, and emit an event Reactive can act on.',
     accent: '#A6D95B',
   },

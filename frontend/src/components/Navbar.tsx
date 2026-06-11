@@ -9,8 +9,8 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion'
-import { ArrowRight, Sprout } from 'lucide-react'
-import { MOCHI } from '@/lib/mochi-colors'
+import { ArrowRight } from 'lucide-react'
+import { BrandLogo } from './BrandLogo'
 import { WalletConnect } from './WalletConnect'
 
 const SPRING = {
@@ -33,22 +33,6 @@ const navItems = [
   { href: '/analytics', label: 'Analytics' },
   { href: '/whitepaper', label: 'Docs' },
 ]
-
-function LandingLogo() {
-  return (
-    <Link href="/" className="relative z-10 inline-flex shrink-0 items-center gap-1.5">
-      <Sprout
-        className="w-4 h-4"
-        style={{ color: MOCHI.matcha }}
-        strokeWidth={2.5}
-      />
-      <span className="text-base font-semibold tracking-tight leading-none">
-        <span style={{ color: MOCHI.strawberry }}>mochi</span>
-        <span style={{ color: MOCHI.matcha }}>trade</span>
-      </span>
-    </Link>
-  )
-}
 
 export function Navbar() {
   const pathname = usePathname()
@@ -141,7 +125,9 @@ export function Navbar() {
           aria-hidden
         />
 
-        <LandingLogo />
+        <div className="relative z-10 shrink-0">
+          <BrandLogo />
+        </div>
 
         <motion.nav
           className="hidden min-w-0 flex-1 md:flex items-center justify-center"
