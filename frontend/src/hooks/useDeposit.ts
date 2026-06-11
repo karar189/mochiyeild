@@ -1,15 +1,27 @@
 'use client'
 
 import { useCallback, useState } from 'react'
-import { parseUnits } from 'viem'
+import { maxUint256, parseUnits } from 'viem'
 import {
   useAccount,
   usePublicClient,
   useWriteContract,
-  useWaitForTransactionReceipt,
 } from 'wagmi'
 import { ERC20_ABI, YIELD_VAULT_ABI } from '@/lib/contracts'
 import { useMochiConfig } from './useMochiConfig'
+
+/** Wait for the wallet nonce to advance after a confirmed tx (avoids MetaMask "nonce too low"). */
+async function waitForNonceSync(
+  publicClient: NonNullable<ReturnType<typeof usePublicClient>>,
+  address: `0x${string}`,
+) {
+  const baseline = await publicClient.getTransactionCount({ address, blockTag: 'latest' })
+  for (let i = 0; i < 20; i++) {
+    const pending = await publicClient.getTransactionCount({ address, blockTag: 'pending' })
+    if (pending > baseline) return
+    await new Promise((resolve) => setTimeout(resolve, 500))
+  }
+}
 
 export function useDeposit() {
   const { address } = useAccount()
@@ -25,6 +37,7 @@ export function useDeposit() {
       }
 
       const amountWei = parseUnits(amount, 18)
+      let approveHash: `0x${string}` | undefined
 
       setStatus('approving')
       const allowance = await publicClient!.readContract({
@@ -35,13 +48,14 @@ export function useDeposit() {
       })
 
       if (allowance < amountWei) {
-        const approveHash = await writeContractAsync({
+        approveHash = await writeContractAsync({
           address: addresses.underlying,
           abi: ERC20_ABI,
           functionName: 'approve',
-          args: [addresses.vault, amountWei],
+          args: [addresses.vault, maxUint256],
         })
         await publicClient!.waitForTransactionReceipt({ hash: approveHash })
+        await waitForNonceSync(publicClient!, address)
       }
 
       setStatus('depositing')
@@ -53,6 +67,7 @@ export function useDeposit() {
       })
       await publicClient!.waitForTransactionReceipt({ hash: depositHash })
       setStatus('idle')
+      return { depositHash, approveHash }
     },
     [address, addresses, isConfigured, publicClient, writeContractAsync],
   )

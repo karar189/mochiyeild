@@ -29,8 +29,9 @@ export default function DepositPage() {
   const { redeem, status: redeemStatus } = useRedeem()
 
   const handleDeposit = async (amount: string) => {
-    await deposit(amount)
+    const result = await deposit(amount)
     refetch()
+    return result
   }
 
   const handleMint = async () => {

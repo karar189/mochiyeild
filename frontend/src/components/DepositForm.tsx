@@ -1,12 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { useAccount } from 'wagmi'
-import { ArrowDown, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { useAccount, useChainId } from 'wagmi'
+import { ArrowDown, Loader2, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react'
+import { getTransactionExplorerUrl } from '@/lib/explorer'
+
+export type DepositResult = {
+  depositHash: `0x${string}`
+  approveHash?: `0x${string}`
+}
 
 interface DepositFormProps {
   underlyingBalance?: bigint
-  onDeposit?: (amount: string) => Promise<void>
+  onDeposit?: (amount: string) => Promise<DepositResult>
   depositStatus?: 'idle' | 'approving' | 'depositing'
   onMintTestTokens?: () => Promise<void>
   showFaucet?: boolean
@@ -20,9 +26,12 @@ export function DepositForm({
   showFaucet = false,
 }: DepositFormProps) {
   const { isConnected } = useAccount()
+  const chainId = useChainId()
   const [amount, setAmount] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [txStatus, setTxStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [txError, setTxError] = useState<string | null>(null)
+  const [successTx, setSuccessTx] = useState<DepositResult | null>(null)
 
   const balanceFormatted = Number(underlyingBalance) / 1e18
   const amountNumber = parseFloat(amount) || 0
@@ -33,13 +42,19 @@ export function DepositForm({
 
     setIsLoading(true)
     setTxStatus('idle')
+    setTxError(null)
+    setSuccessTx(null)
 
     try {
-      await onDeposit(amount)
+      const result = await onDeposit(amount)
+      setSuccessTx(result)
       setTxStatus('success')
       setAmount('')
-    } catch {
+    } catch (err) {
       setTxStatus('error')
+      const message =
+        err instanceof Error ? err.message : 'Transaction failed. Please try again.'
+      setTxError(message.includes('nonce too low') ? 'Wallet nonce out of sync — try Deposit again.' : message)
     } finally {
       setIsLoading(false)
     }
@@ -159,17 +174,58 @@ export function DepositForm({
         </button>
       )}
 
-      {txStatus === 'success' && (
-        <div className="mt-4 p-3 bg-[#A6D95B]/10 border border-[#A6D95B]/25 rounded-xl flex items-center gap-2">
-          <CheckCircle className="w-4 h-4 text-[#A6D95B]" strokeWidth={1.75} />
-          <span className="text-[#A6D95B] text-sm">Deposit successful!</span>
+      {txStatus === 'success' && successTx && (
+        <div className="mt-4 p-3 bg-[#A6D95B]/10 border border-[#A6D95B]/25 rounded-xl space-y-2">
+          <div className="flex items-center gap-2">
+            <CheckCircle className="w-4 h-4 text-[#A6D95B] shrink-0" strokeWidth={1.75} />
+            <span className="text-[#A6D95B] text-sm font-medium">Deposit successful!</span>
+          </div>
+          <TxHashLink chainId={chainId} label="Deposit tx" hash={successTx.depositHash} />
+          {successTx.approveHash && (
+            <TxHashLink chainId={chainId} label="Approve tx" hash={successTx.approveHash} />
+          )}
         </div>
       )}
       {txStatus === 'error' && (
         <div className="mt-4 p-3 bg-rose/30 border border-rose rounded-xl flex items-center gap-2">
           <AlertCircle className="w-4 h-4 text-primary" strokeWidth={1.75} />
-          <span className="text-primary text-sm">Transaction failed. Please try again.</span>
+          <span className="text-primary text-sm">{txError ?? 'Transaction failed. Please try again.'}</span>
         </div>
+      )}
+    </div>
+  )
+}
+
+function truncateHash(hash: string) {
+  return `${hash.slice(0, 10)}…${hash.slice(-8)}`
+}
+
+function TxHashLink({
+  chainId,
+  label,
+  hash,
+}: {
+  chainId: number
+  label: string
+  hash: `0x${string}`
+}) {
+  const explorerUrl = getTransactionExplorerUrl(chainId, hash)
+
+  return (
+    <div className="flex items-center justify-between gap-2 pl-6 text-xs">
+      <span className="text-secondary">{label}</span>
+      {explorerUrl ? (
+        <a
+          href={explorerUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 font-mono text-[#A6D95B] hover:underline"
+        >
+          {truncateHash(hash)}
+          <ExternalLink className="w-3 h-3" strokeWidth={1.75} />
+        </a>
+      ) : (
+        <span className="font-mono text-primary">{truncateHash(hash)}</span>
       )}
     </div>
   )
