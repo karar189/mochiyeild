@@ -92,7 +92,8 @@ case "$cmd" in
       --rpc-url "$REACTIVE_RPC" \
       --private-key "$PRIVATE_KEY" \
       --broadcast \
-      --chain-id "$REACTIVE_CHAIN_ID"
+      --chain-id "$REACTIVE_CHAIN_ID" \
+      --skip-simulation
     KEEPER="$(latest_broadcast_address DeployMochiReactiveKeeper.s.sol "$REACTIVE_CHAIN_ID")"
     patch_reactive_keeper "$KEEPER"
     sync_deployments

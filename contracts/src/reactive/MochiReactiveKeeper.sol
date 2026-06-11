@@ -33,7 +33,8 @@ contract MochiReactiveKeeper is AbstractReactive {
         driftThresholdBps = driftThresholdBps_;
         callbackGasLimit = callbackGasLimit_;
 
-        service.subscribe(
+        bytes memory payload = abi.encodeWithSignature(
+            "subscribe(uint256,address,uint256,uint256,uint256,uint256)",
             originChainId,
             mochiHook,
             PARITY_DRIFT_TOPIC_0,
@@ -41,6 +42,10 @@ contract MochiReactiveKeeper is AbstractReactive {
             REACTIVE_IGNORE,
             REACTIVE_IGNORE
         );
+        (bool subscribed,) = address(service).call(payload);
+        if (!subscribed) {
+            vm = true;
+        }
     }
 
     function react(IReactive.LogRecord calldata log) external vmOnly {
