@@ -22,7 +22,7 @@ export interface HookEvent {
 }
 
 const MAX_EVENTS = 20
-const LOG_CHUNK_SIZE = 9999n
+const LOG_CHUNK_SIZE = BigInt(9999)
 const MAX_LOG_CHUNKS = 8
 
 type ParsedHookLog = Log & {
@@ -128,7 +128,7 @@ async function fetchPaginatedEvents(
     })) as ParsedHookLog[]
     collected.push(...chunk)
     if (start === BigInt(0)) break
-    end = start - 1n
+    end = start - BigInt(1)
   }
 
   return collected
@@ -167,7 +167,13 @@ export function useHookEvents() {
         ])
 
         const allLogs = [...hookLogs, ...reactiveLogs] as ParsedHookLog[]
-        const blockNumbers = [...new Set(allLogs.map((log) => log.blockNumber))]
+        const blockNumbers = [
+          ...new Set(
+            allLogs
+              .map((log) => log.blockNumber)
+              .filter((blockNumber): blockNumber is bigint => blockNumber != null),
+          ),
+        ]
         const blockTimestamps = new Map<bigint, number>()
 
         await Promise.all(
@@ -179,7 +185,12 @@ export function useHookEvents() {
 
         const historical = allLogs
           .map((log) =>
-            logToHookEvent(log, blockTimestamps.get(log.blockNumber) ?? Date.now()),
+            logToHookEvent(
+              log,
+              log.blockNumber != null
+                ? (blockTimestamps.get(log.blockNumber) ?? Date.now())
+                : Date.now(),
+            ),
           )
           .filter((event): event is HookEvent => event !== null)
 
