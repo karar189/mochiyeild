@@ -26,6 +26,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${openSans.variable} ${bebasNeue.variable} ${inter.variable} h-full antialiased`}
     >
       <head>
@@ -35,7 +36,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[#050505] text-[#F6F5F2] font-[family-name:var(--font-inter)]">
+      <body
+        suppressHydrationWarning
+        className="min-h-full flex flex-col bg-[#050505] text-[#F6F5F2] font-[family-name:var(--font-inter)]"
+      >
         <JsonLd
           data={[
             websiteJsonLd(),

@@ -2,14 +2,25 @@
 
 import deployments from '@/lib/deployments.json'
 import type { WhitepaperSection } from '@/lib/whitepaper/sections'
+import { ContractAddressLink } from '@/components/ContractAddressChip'
+import { getPublicDeployment } from '@/lib/public-deployment'
 import { WhitepaperVisual } from './WhitepaperVisual'
 
-function shortenAddress(addr: string) {
-  return `${addr.slice(0, 6)}…${addr.slice(-4)}`
-}
-
 export function DeploymentsBlock() {
-  const { chainId, addresses, pools } = deployments
+  const json = deployments
+  const { chainId: envChainId } = getPublicDeployment()
+  const chainId = envChainId || json.chainId
+  const addresses = {
+    vault: process.env.NEXT_PUBLIC_VAULT ?? json.addresses.vault,
+    hook: process.env.NEXT_PUBLIC_HOOK ?? json.addresses.hook,
+    ptToken: process.env.NEXT_PUBLIC_PT_TOKEN ?? json.addresses.ptToken,
+    ytToken: process.env.NEXT_PUBLIC_YT_TOKEN ?? json.addresses.ytToken,
+    underlying: process.env.NEXT_PUBLIC_UNDERLYING ?? json.addresses.underlying,
+    weth: process.env.NEXT_PUBLIC_WETH ?? json.addresses.weth,
+    swapRouter: process.env.NEXT_PUBLIC_SWAP_ROUTER ?? json.addresses.swapRouter,
+    poolManager: process.env.NEXT_PUBLIC_POOL_MANAGER ?? json.addresses.poolManager,
+  }
+  const pools = json.pools
 
   const rows: [string, string][] = [
     ['Chain ID', String(chainId)],
@@ -46,11 +57,14 @@ export function DeploymentsBlock() {
             {rows.map(([name, addr]) => (
               <tr key={name} className="border-b border-white/[0.06] last:border-0">
                 <td className="px-4 py-3 text-[#A1A1AA]">{name}</td>
-                <td
-                  className="px-4 py-3 font-mono text-xs text-[#F6F5F2] break-all"
-                  title={addr}
-                >
-                  {addr.startsWith('0x') && addr.length > 20 ? shortenAddress(addr) : addr}
+                <td className="px-4 py-3 font-mono text-xs break-all">
+                  {addr.startsWith('0x') && addr.length === 42 ? (
+                    <ContractAddressLink address={addr} chainId={chainId} />
+                  ) : (
+                    <span className="text-[#F6F5F2]" title={addr}>
+                      {addr}
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}

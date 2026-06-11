@@ -57,6 +57,35 @@ User
 
 ---
 
+## Deployed Contracts (Unichain Sepolia)
+
+**Network:** [Unichain Sepolia](https://sepolia.unichain.org) · **Chain ID:** `1301` · **Explorer:** [Blockscout](https://unichain-sepolia.blockscout.com)
+
+Latest deploy succeeded on-chain (recorded in `contracts/broadcast/Deploy.s.sol/1301/run-latest.json`). A `txpool is full` error at the end of the script did not prevent these contracts from landing.
+
+| Contract | Address | Verified on-chain |
+|----------|---------|-------------------|
+| MockWstETH | [`0x2c36B42B1FDc25429F344E5810fE14e21E8C4e9E`](https://unichain-sepolia.blockscout.com/address/0x2c36B42B1FDc25429F344E5810fE14e21E8C4e9E) | Yes |
+| Mock WETH | [`0xD2E4BCBdbdc94f42A0326964E8CEC81c6fECf2Fb`](https://unichain-sepolia.blockscout.com/address/0xD2E4BCBdbdc94f42A0326964E8CEC81c6fECf2Fb) | Yes |
+| PT Token | [`0xb2c25e8F64236E374283f82F6dFC5F362A78B5D1`](https://unichain-sepolia.blockscout.com/address/0xb2c25e8F64236E374283f82F6dFC5F362A78B5D1) | Yes |
+| YT Token | [`0x2B21322dfA81FcF928B0ad3e1648E5A0aC62E115`](https://unichain-sepolia.blockscout.com/address/0x2B21322dfA81FcF928B0ad3e1648E5A0aC62E115) | Yes |
+| YieldVault | [`0xBd3c4b2849229f590154d4C11F127Cf0534aAC01`](https://unichain-sepolia.blockscout.com/address/0xBd3c4b2849229f590154d4C11F127Cf0534aAC01) | Yes |
+| MochiYieldHook | [`0x1f592B54a638d55056Ad45ed810814F7880580c0`](https://unichain-sepolia.blockscout.com/address/0x1f592B54a638d55056Ad45ed810814F7880580c0) | Yes |
+
+**Frontend env (Vercel / `.env.local`):**
+
+```bash
+NEXT_PUBLIC_CHAIN_ID=1301
+NEXT_PUBLIC_HOOK=0x1f592B54a638d55056Ad45ed810814F7880580c0
+NEXT_PUBLIC_VAULT=0xBd3c4b2849229f590154d4C11F127Cf0534aAC01
+NEXT_PUBLIC_PT_TOKEN=0xb2c25e8F64236E374283f82F6dFC5F362A78B5D1
+NEXT_PUBLIC_YT_TOKEN=0x2B21322dfA81FcF928B0ad3e1648E5A0aC62E115
+```
+
+Local Anvil addresses (chain `31337`) remain in `frontend/src/lib/deployments.json` for offline dev.
+
+---
+
 ## Hook Features
 
 ### Layer 1: Implied Rate Sentinel
@@ -146,7 +175,7 @@ event MarketStressDetected(uint256 timestamp, string reason);
 1. ~~**Deploy Scripts** - Hook address mining and pool initialization~~ (basic done)
 2. ~~**Frontend** - Next.js app with event feed and metrics~~ Done
 3. **Reactive Network** - Auto-arbitrage on parity drift
-4. **Testnet Deploy** - Deploy to Sepolia/Base Sepolia
+4. ~~**Testnet Deploy** - Deploy to Unichain Sepolia~~ Done — see [Deployed Contracts](#deployed-contracts-unichain-sepolia)
 5. **Contract Integration** - Wire frontend to real contracts
 
 ---

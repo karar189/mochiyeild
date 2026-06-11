@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { FileText } from 'lucide-react'
 import { BrandLogo } from '@/components/BrandLogo'
-import deployment from '@/lib/deployments.json'
+import { ContractAddressChip } from '@/components/ContractAddressChip'
+import { getPublicDeployment } from '@/lib/public-deployment'
 
 const GITHUB_URL = 'https://github.com/karar189/mochitrade'
 
@@ -35,18 +36,20 @@ const footerLinks = {
 
 const STACK = ['Solidity', 'Uniswap v4', 'Foundry', 'Next.js', 'Reactive Network']
 
-const CONTRACTS: { label: string; address: string }[] = [
-  { label: 'Hook', address: deployment.addresses.hook },
-  { label: 'Vault', address: deployment.addresses.vault },
-  { label: 'PT', address: deployment.addresses.ptToken },
-  { label: 'YT', address: deployment.addresses.ytToken },
-]
-
-function truncate(address: string) {
-  return `${address.slice(0, 6)}…${address.slice(-4)}`
+function buildContractList(): { label: string; address: string }[] {
+  const { addresses } = getPublicDeployment()
+  return [
+    { label: 'Hook', address: addresses.hook },
+    { label: 'Vault', address: addresses.vault },
+    { label: 'PT', address: addresses.ptToken },
+    { label: 'YT', address: addresses.ytToken },
+  ]
 }
 
 export function Footer() {
+  const { chainId } = getPublicDeployment()
+  const contracts = buildContractList()
+
   return (
     <footer className="bg-[#050505] text-[#F6F5F2] border-t border-white/[0.06] section-padding py-16">
       <div className="content-max">
@@ -115,16 +118,13 @@ export function Footer() {
             Deployed contracts
           </p>
           <div className="flex flex-wrap gap-3">
-            {CONTRACTS.map((c) => (
-              <span
+            {contracts.map((c) => (
+              <ContractAddressChip
                 key={c.label}
-                className="inline-flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-xs"
-              >
-                <span className="font-medium text-[#F6F5F2]">{c.label}</span>
-                <span className="font-mono text-[#A1A1AA]">
-                  {truncate(c.address)}
-                </span>
-              </span>
+                label={c.label}
+                address={c.address}
+                chainId={chainId}
+              />
             ))}
           </div>
         </div>
