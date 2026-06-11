@@ -73,7 +73,7 @@ export function useDeposit() {
   )
 
   const mintTestTokens = useCallback(async () => {
-    if (!address || !addresses || !isConfigured) return
+    if (!address || !addresses || !isConfigured) return undefined
 
     const hash = await writeContractAsync({
       address: addresses.underlying,
@@ -82,6 +82,7 @@ export function useDeposit() {
       args: [address, parseUnits('100', 18)],
     })
     await publicClient!.waitForTransactionReceipt({ hash })
+    return hash
   }, [address, addresses, isConfigured, publicClient, writeContractAsync])
 
   return { deposit, mintTestTokens, status, isConfigured }

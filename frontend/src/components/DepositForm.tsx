@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useAccount, useChainId } from 'wagmi'
-import { ArrowDown, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { ArrowDown, Loader2, CheckCircle, AlertCircle, Droplets } from 'lucide-react'
 import { TxHashLink } from '@/components/TxHashLink'
 
 export type DepositResult = {
@@ -14,7 +14,7 @@ interface DepositFormProps {
   underlyingBalance?: bigint
   onDeposit?: (amount: string) => Promise<DepositResult>
   depositStatus?: 'idle' | 'approving' | 'depositing'
-  onMintTestTokens?: () => Promise<void>
+  onMintTestTokens?: () => Promise<`0x${string}` | undefined>
   showFaucet?: boolean
 }
 
@@ -32,6 +32,8 @@ export function DepositForm({
   const [txStatus, setTxStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [txError, setTxError] = useState<string | null>(null)
   const [successTx, setSuccessTx] = useState<DepositResult | null>(null)
+  const [faucetStatus, setFaucetStatus] = useState<'idle' | 'minting' | 'success' | 'error'>('idle')
+  const [faucetTx, setFaucetTx] = useState<`0x${string}` | null>(null)
 
   const balanceFormatted = Number(underlyingBalance) / 1e18
   const amountNumber = parseFloat(amount) || 0
@@ -64,6 +66,20 @@ export function DepositForm({
     setAmount(balanceFormatted.toString())
   }
 
+  const handleFaucet = async () => {
+    if (!onMintTestTokens) return
+
+    setFaucetStatus('minting')
+    setFaucetTx(null)
+    try {
+      const hash = await onMintTestTokens()
+      setFaucetTx(hash ?? null)
+      setFaucetStatus('success')
+    } catch {
+      setFaucetStatus('error')
+    }
+  }
+
   const buttonLabel = () => {
     if (depositStatus === 'approving') return 'Approving wstETH...'
     if (depositStatus === 'depositing') return 'Depositing...'
@@ -76,12 +92,56 @@ export function DepositForm({
       <h3 className="text-primary font-medium mb-4">Deposit wstETH</h3>
 
       {showFaucet && onMintTestTokens && (
-        <button
-          onClick={onMintTestTokens}
-          className="w-full mb-4 py-2 text-sm bg-cream border border-border rounded-full text-secondary hover:bg-yield-green/30"
-        >
-          Get 100 test wstETH (local faucet)
-        </button>
+        <div className="mb-4 rounded-xl border border-[#A6D95B]/25 bg-[#A6D95B]/5 p-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 min-w-0">
+              <Droplets className="w-4 h-4 text-[#A6D95B] shrink-0" strokeWidth={1.75} />
+              <div className="min-w-0">
+                <p className="text-primary text-sm font-medium">Testnet faucet</p>
+                <p className="text-muted text-xs truncate">
+                  New here? Mint free test wstETH to try the protocol.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={handleFaucet}
+              disabled={!isConnected || faucetStatus === 'minting' || isTxPending}
+              className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-full bg-[#A6D95B]/15 border border-[#A6D95B]/30 text-[#A6D95B] hover:bg-[#A6D95B]/25 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {faucetStatus === 'minting' ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Minting...
+                </>
+              ) : (
+                'Mint 100 wstETH'
+              )}
+            </button>
+          </div>
+
+          {!isConnected && (
+            <p className="text-muted text-xs mt-2">Connect your wallet to use the faucet.</p>
+          )}
+          {faucetStatus === 'success' && (
+            <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#A6D95B]/15 pt-2.5">
+              <CheckCircle className="w-3.5 h-3.5 text-[#A6D95B] shrink-0" strokeWidth={1.75} />
+              <span className="text-[#A6D95B] text-xs font-medium">
+                100 test wstETH minted to your wallet.
+              </span>
+              {faucetTx && (
+                <TxHashLink chainId={chainId} label="Mint tx" hash={faucetTx} />
+              )}
+            </div>
+          )}
+          {faucetStatus === 'error' && (
+            <div className="mt-3 flex items-center gap-2 border-t border-[#A6D95B]/15 pt-2.5">
+              <AlertCircle className="w-3.5 h-3.5 text-primary shrink-0" strokeWidth={1.75} />
+              <span className="text-primary text-xs">
+                Mint failed — check your wallet and try again.
+              </span>
+            </div>
+          )}
+        </div>
       )}
 
       <div className="bg-cream rounded-xl p-4 mb-4 border border-border">

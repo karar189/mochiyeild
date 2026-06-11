@@ -35,8 +35,9 @@ export default function DepositPage() {
   }
 
   const handleMint = async () => {
-    await mintTestTokens()
+    const hash = await mintTestTokens()
     refetch()
+    return hash
   }
 
   const handleRedeem = async (amount: string) => {
@@ -62,8 +63,8 @@ export default function DepositPage() {
             underlyingBalance={isConnected ? underlyingBalance : BigInt(0)}
             onDeposit={isConfigured ? handleDeposit : undefined}
             depositStatus={status}
-            onMintTestTokens={chainId === 31337 ? handleMint : undefined}
-            showFaucet={chainId === 31337 && isConfigured}
+            onMintTestTokens={isConfigured ? handleMint : undefined}
+            showFaucet={isConfigured}
           />
 
           <div className="mt-6">
